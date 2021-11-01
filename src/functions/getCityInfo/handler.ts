@@ -2,9 +2,7 @@ import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 
-import schema from './schema';
-
-const getCityInfo: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+const getCityInfo: ValidatedEventAPIGatewayProxyEvent<void> = async (event) => {
   const city = event.pathParameters?.city;
 
   if (!city || !cityData[city]) {
