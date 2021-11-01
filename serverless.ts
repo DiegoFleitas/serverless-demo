@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
-import hello from '@functions/hello';
+import getCityInfo from '@functions/getCityInfo';
 
 const serverlessConfiguration: AWS = {
   service: 'serverless-todos-rest-api',
@@ -31,7 +31,9 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: '20201221',
   },
   // import the function via paths
-  functions: { hello },
+  functions: { 
+    getCityInfo 
+  },
 };
 
 module.exports = serverlessConfiguration;
