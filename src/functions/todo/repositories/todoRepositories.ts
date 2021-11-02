@@ -1,4 +1,4 @@
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import type { DocumentClient } from 'aws-sdk/clients/dynamodb';
 
 import { TodoItem } from '../model/todoItem';
 import { createDynamoDBClient } from '../utils/dynamodbSetup';
@@ -24,20 +24,19 @@ export class TodoRepository {
         return todo;
     }
 
-
-    // FIXME: support not requiring name
     async updateTodo(partialTodo: Partial<TodoItem>): Promise<TodoItem> {
         const { id, name, done } = partialTodo;
         const updated = await this.docClient.update({
             TableName: this.todoTable,
             Key: { 'id': id },
-            UpdateExpression: 'set #name = :name, done = :done',
+            UpdateExpression: 'set #name = :name, done = :done, createdAt = :createdAt',
             ExpressionAttributeNames: {
                 '#name': 'name'
             },
             ExpressionAttributeValues: {
                 ':name': name,
-                ':done': done
+                ':done': done,
+                ':createdAt': new Date().toISOString()
             },
             ReturnValues: 'ALL_NEW'
         }).promise();

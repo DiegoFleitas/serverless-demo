@@ -1,6 +1,5 @@
 import 'source-map-support/register';
 
-// import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 
 // http
