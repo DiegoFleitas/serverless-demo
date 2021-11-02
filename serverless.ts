@@ -1,7 +1,11 @@
 import type { AWS } from '@serverless/typescript';
 
 import getCityInfo from '@functions/getCityInfo';
+import { createTodo, deleteTodo, updateTodo, getAllTodos } from '@functions/todo';
 
+import dynamoDbConfig from 'resources/dynamodb';
+
+// CloudFormation JSON template
 const serverlessConfiguration: AWS = {
   service: 'serverless-todos-rest-api',
   frameworkVersion: '2',
@@ -16,7 +20,10 @@ const serverlessConfiguration: AWS = {
       platform: 'node',
     },
   },
-  plugins: ['serverless-esbuild'],
+  plugins: [
+    'serverless-esbuild',
+    'serverless-iam-roles-per-function'
+  ],
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
@@ -26,14 +33,19 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-      NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+      TODOS_TABLE: 'todo-list-table'
     },
     lambdaHashingVersion: '20201221',
   },
+  // package functions individually
+  package: {
+    individually: true
+  },
   // import the function via paths
   functions: { 
-    getCityInfo 
+    getCityInfo, createTodo, deleteTodo, updateTodo, getAllTodos
   },
+  resources: dynamoDbConfig
 };
 
 module.exports = serverlessConfiguration;
